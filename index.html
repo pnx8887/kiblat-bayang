@@ -309,6 +309,7 @@
     border:1px solid var(--line);
     border-radius: 14px;
     padding: 22px 22px 6px;
+    margin-bottom: 26px;
   }
   .howto h2{
     font-family:'Spectral', serif;
@@ -332,6 +333,29 @@
     padding-bottom: 18px;
     line-height:1.6;
   }
+
+  .disclaimer{
+    background: var(--surface);
+    border:1px solid var(--line);
+    border-left: 3px solid var(--danger);
+    border-radius: 14px;
+    padding: 20px 22px 6px;
+    margin-top: 22px;
+  }
+  .disclaimer h2{
+    font-family:'Spectral', serif;
+    font-weight:500;
+    font-size:16px;
+    margin: 0 0 12px;
+    color: var(--muted);
+  }
+  .disclaimer p{
+    font-size:12.5px;
+    color: var(--muted);
+    line-height:1.65;
+    margin: 0 0 16px;
+  }
+  .disclaimer p strong{ color: var(--parchment); font-weight:600; }
 
   footer{
     text-align:center;
@@ -533,6 +557,17 @@
   <p class="sub">Tancapkan tiang lurus di tanah lapang. Alat ini mengira arah bayang tiang tersebut pada bila-bila masa siang, dan berapa darjah perlu diputar dari garis bayang itu untuk menghadap Kaabah.</p>
   <button class="ghost" id="btnInstall" type="button" style="display:none;margin-bottom:22px;">⬇️ Pasang sebagai aplikasi</button>
 
+  <div class="howto">
+    <h2>Cara guna dengan tiang sebenar</h2>
+    <ol>
+      <li>Pilih kawasan tanah lapang dan rata, tancapkan mana-mana tiang atau kayu lurus secara tegak — batang penyapu atau tiang khemah pun boleh.</li>
+      <li>Tetapkan lokasi anda di bawah, dan pilih masa anda akan berada di luar (atau biarkan mod langsung).</li>
+      <li>Pada masa tersebut, tandakan titik tepat di mana hujung bayang jatuh, kemudian lukis garis dari pangkal tiang melalui tanda itu. Garis itu ialah garis bayang anda.</li>
+      <li>Berdiri di pangkal tiang menghadap sepanjang garis bayang, ke arah hujungnya. Pusing mengikut sudut yang ditunjukkan di bawah, ke arah yang dinyatakan — itulah arah Kiblat.</li>
+    </ol>
+    <p class="note">Arah bayang hanya bergantung pada kedudukan matahari, bukan ketinggian tiang, jadi tiang mana-mana pun memberikan arah yang sama — tiang yang lebih tinggi cuma menghasilkan garis yang lebih panjang dan mudah ditanda. Kaedah ini memerlukan matahari berada di atas ufuk; ia tidak akan berfungsi sebelum matahari terbit, selepas matahari terbenam, atau di dalam bangunan.</p>
+  </div>
+
   <div class="controls">
     <div>
       <span class="field-label">Lokasi</span>
@@ -663,15 +698,11 @@
     </div>
   </div>
 
-  <div class="howto">
-    <h2>Cara guna dengan tiang sebenar</h2>
-    <ol>
-      <li>Pilih kawasan tanah lapang dan rata, tancapkan mana-mana tiang atau kayu lurus secara tegak — batang penyapu atau tiang khemah pun boleh.</li>
-      <li>Tetapkan lokasi anda di atas, dan pilih masa anda akan berada di luar (atau biarkan mod langsung).</li>
-      <li>Pada masa tersebut, tandakan titik tepat di mana hujung bayang jatuh, kemudian lukis garis dari pangkal tiang melalui tanda itu. Garis itu ialah garis bayang anda.</li>
-      <li>Berdiri di pangkal tiang menghadap sepanjang garis bayang, ke arah hujungnya. Pusing mengikut sudut yang ditunjukkan di atas, ke arah yang dinyatakan — itulah arah Kiblat.</li>
-    </ol>
-    <p class="note">Arah bayang hanya bergantung pada kedudukan matahari, bukan ketinggian tiang, jadi tiang mana-mana pun memberikan arah yang sama — tiang yang lebih tinggi cuma menghasilkan garis yang lebih panjang dan mudah ditanda. Kaedah ini memerlukan matahari berada di atas ufuk; ia tidak akan berfungsi sebelum matahari terbit, selepas matahari terbenam, atau di dalam bangunan.</p>
+  <div class="disclaimer">
+    <h2>Penafian</h2>
+    <p>Aplikasi ini disediakan secara percuma, "sebagaimana adanya", tanpa sebarang jaminan ketepatan. Arah yang dipaparkan dikira menggunakan formula astronomi piawai (bearing bulatan besar ke Kaabah dan kedudukan matahari), dan ketepatannya bergantung sepenuhnya pada ketepatan lokasi GPS peranti anda, jam &amp; zon waktu peranti, serta cara tiang ditegakkan.</p>
+    <p>Aplikasi ini bukan produk rasmi JAKIM atau mana-mana badan agama, dan tidak dimaksudkan untuk menggantikan pengesahan rasmi. <strong>Sekiranya ketepatan mutlak diperlukan (contohnya untuk pembinaan masjid atau surau baharu), sila sahkan dengan JAKIM, jabatan agama negeri, atau pihak berkelayakan tempatan.</strong></p>
+    <p>Aplikasi ini tidak mengumpul, menyimpan, atau menghantar sebarang data peribadi ke mana-mana pelayan. Lokasi dan suapan kamera anda diproses sepenuhnya di dalam pelayar peranti anda sendiri dan tidak dikongsi dengan pembangun aplikasi ini atau pihak ketiga.</p>
   </div>
 
   <footer>Arah Kiblat menggunakan bearing bulatan besar (great-circle) ke Kaabah (21.4225° U, 39.8262° T). Kedudukan matahari menggunakan persamaan kedudukan solar piawai. Ketepatan bergantung pada jam, zon waktu, dan ketepatan lokasi peranti anda.</footer>
