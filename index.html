@@ -927,7 +927,7 @@
       $('shadowNeedle').setAttribute('opacity', '0.25');
       $('sunDot').setAttribute('opacity', '0.25');
       $('sweepArc').setAttribute('opacity', '0');
-      setNeedle('shadowNeedle', norm360(sun.azimuth+180), 150);
+      setNeedle('shadowNeedle', norm360(sun.azimuth), 150);
       setNeedle('sunDot', sun.azimuth, 170).x;
       const sp = pointAt(sun.azimuth, 170);
       $('sunDot').setAttribute('cx', sp.x.toFixed(1));
@@ -936,7 +936,7 @@
       return;
     }
 
-    const shadowAz = norm360(sun.azimuth + 180);
+    const shadowAz = norm360(sun.azimuth);
     $('outShadow').innerHTML = fmtDeg(shadowAz) + '<small> °</small>';
 
     $('shadowNeedle').setAttribute('opacity', '1');
@@ -1267,7 +1267,7 @@
           const sun = solarPosition(now, lat, lon);
           const qb = qiblaBearing(lat, lon);
           const daylight = sun.elevation > 0.3;
-          const shadowAz = ((sun.azimuth + 180) % 360 + 360) % 360;
+          const shadowAz = ((sun.azimuth) % 360 + 360) % 360;
 
           drawBase();
 
