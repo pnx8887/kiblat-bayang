@@ -369,6 +369,30 @@
     * { transition: none !important; animation: none !important; }
   }
 
+  /* ---- tabs ---- */
+  .tabbar{
+    display:flex;
+    gap:8px;
+    margin-bottom: 22px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .tab-btn{
+    flex:1;
+    white-space:nowrap;
+    padding:12px 14px;
+    font-size:13.5px;
+    background: var(--surface);
+    border:1px solid var(--line);
+  }
+  .tab-btn.active{
+    background: linear-gradient(180deg, rgba(201,162,75,0.22), rgba(201,162,75,0.06));
+    border-color: rgba(201,162,75,0.55);
+    color: var(--brass);
+    font-weight:600;
+  }
+  .tab-panel[hidden]{ display:none; }
+
   /* ---- AR trigger ---- */
   .ar-trigger{
     text-align:center;
@@ -552,10 +576,17 @@
 <body>
 <div class="wrap">
 
-  <div class="eyebrow">Kaedah Gnomon · 000° = utara</div>
-  <h1>Cari arah <em>Kiblat</em> melalui bayang</h1>
-  <p class="sub">Tancapkan tiang lurus di tanah lapang. Alat ini mengira arah bayang tiang tersebut pada bila-bila masa siang, dan berapa darjah perlu diputar dari garis bayang itu untuk menghadap Kaabah.</p>
+  <div class="eyebrow" id="heroEyebrow">Kaedah Gnomon · 000° = utara</div>
+  <h1 id="heroTitle">Cari arah <em>Kiblat</em> melalui bayang</h1>
+  <p class="sub" id="heroSub">Tancapkan tiang lurus di tanah lapang. Alat ini mengira arah bayang tiang tersebut pada bila-bila masa siang, dan berapa darjah perlu diputar dari garis bayang itu untuk menghadap Kaabah.</p>
   <button class="ghost" id="btnInstall" type="button" style="display:none;margin-bottom:22px;">⬇️ Pasang sebagai aplikasi</button>
+
+  <div class="tabbar" role="tablist">
+    <button class="tab-btn active" id="tabBtnBayang" role="tab" aria-selected="true" type="button">☀️ Kaedah Bayang</button>
+    <button class="tab-btn" id="tabBtnBangunan" role="tab" aria-selected="false" type="button">🏢 Rujukan Bangunan (AR)</button>
+  </div>
+
+  <div id="tabBayang" class="tab-panel">
 
   <div class="howto">
     <h2>Cara guna dengan tiang sebenar</h2>
@@ -703,6 +734,46 @@
     <p>Aplikasi ini disediakan secara percuma, "sebagaimana adanya", tanpa sebarang jaminan ketepatan. Arah yang dipaparkan dikira menggunakan formula astronomi piawai (bearing bulatan besar ke Kaabah dan kedudukan matahari), dan ketepatannya bergantung sepenuhnya pada ketepatan lokasi GPS peranti anda, jam &amp; zon waktu peranti, serta cara tiang ditegakkan.</p>
     <p>Aplikasi ini bukan produk rasmi JAKIM atau mana-mana badan agama, dan tidak dimaksudkan untuk menggantikan pengesahan rasmi. <strong>Sekiranya ketepatan mutlak diperlukan (contohnya untuk pembinaan masjid atau surau baharu), sila sahkan dengan JAKIM, jabatan agama negeri, atau pihak berkelayakan tempatan.</strong></p>
     <p>Aplikasi ini tidak mengumpul, menyimpan, atau menghantar sebarang data peribadi ke mana-mana pelayan. Lokasi dan suapan kamera anda diproses sepenuhnya di dalam pelayar peranti anda sendiri dan tidak dikongsi dengan pembangun aplikasi ini atau pihak ketiga.</p>
+  </div>
+
+  </div>
+
+  <div id="tabBangunan" class="tab-panel" hidden>
+
+    <div class="howto">
+      <h2>Rujukan Bangunan (AR)</h2>
+      <p class="note" style="padding-bottom:14px;">Mod ini memaparkan anak panah 3D yang "melekat" pada arah sebenar Kiblat semasa anda mengelilingkan kamera — gunakan bangunan tinggi di kejauhan sebagai penanda kasar, sama seperti orang ramai menggunakan puncak bukit atau menara sebagai rujukan arah. Aplikasi cuba mencari bangunan bernama berhampiran (data OpenStreetMap) yang kasarnya sejajar dengan arah Kiblat, dan memaparkan namanya jika dijumpai.</p>
+      <p class="note" style="padding-bottom:14px;"><strong style="color:var(--parchment);">Had kaedah ini:</strong> mod ini <em>menggunakan kompas magnet peranti anda</em> (tidak seperti mod AR Kaedah Bayang di atas), kerana anak panah perlu kekal "terpaku" pada satu arah sebenar semasa kamera digerakkan — ini mustahil tanpa data arah kompas. Kompas telefon boleh terpesong beberapa darjah, terutamanya berhampiran logam/elektronik; kalibrasi dengan gerakan angka-8 jika anak panah kelihatan tidak stabil. Untuk ketepatan penuh, guna tab "Kaedah Bayang".</p>
+    </div>
+
+    <div class="ar-trigger">
+      <button class="primary" id="btnARBuilding" type="button">📷🏢 Buka AR Rujukan Bangunan</button>
+      <p class="ar-note">Menggunakan kompas peranti + data bangunan OpenStreetMap berhampiran lokasi anda.</p>
+    </div>
+
+    <div class="ar-overlay" id="arBuildingOverlay" hidden>
+      <video id="arBuildingVideo" autoplay playsinline muted></video>
+      <canvas id="arBuildingCanvas"></canvas>
+      <div class="ar-top">
+        <button class="ar-close" id="btnARBuildingClose" type="button" aria-label="Tutup mod AR">✕</button>
+        <div class="ar-hint" id="arBuildingHint">Memulakan kamera…</div>
+      </div>
+      <div class="ar-bottom">
+        <div class="ar-readout" id="arBuildingReadout"></div>
+        <div class="ar-manual" id="arBuildingManual" hidden>
+          <label for="arBuildingManualHeading">Arah manual</label>
+          <input type="range" id="arBuildingManualHeading" min="0" max="359" value="0">
+          <label for="arBuildingManualHeading" id="arBuildingManualValue" style="min-width:44px;text-align:right;">0°</label>
+        </div>
+      </div>
+      <div class="ar-error" id="arBuildingError" hidden>
+        <div>
+          <p id="arBuildingErrorText">—</p>
+          <button class="primary" id="btnARBuildingErrorClose" type="button">Tutup</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <footer>Arah Kiblat menggunakan bearing bulatan besar (great-circle) ke Kaabah (21.4225° U, 39.8262° T). Kedudukan matahari menggunakan persamaan kedudukan solar piawai. Ketepatan bergantung pada jam, zon waktu, dan ketepatan lokasi peranti anda.</footer>
@@ -1064,6 +1135,43 @@
 
   setLive(true);
 
+  // ---- tabs ----
+  (function(){
+    const tabBtnBayang = $('tabBtnBayang'), tabBtnBangunan = $('tabBtnBangunan');
+    const tabBayang = $('tabBayang'), tabBangunan = $('tabBangunan');
+    const heroEyebrow = $('heroEyebrow'), heroTitle = $('heroTitle'), heroSub = $('heroSub');
+
+    const HERO = {
+      bayang: {
+        eyebrow: 'Kaedah Gnomon · 000° = utara',
+        title: 'Cari arah <em>Kiblat</em> melalui bayang',
+        sub: 'Tancapkan tiang lurus di tanah lapang. Alat ini mengira arah bayang tiang tersebut pada bila-bila masa siang, dan berapa darjah perlu diputar dari garis bayang itu untuk menghadap Kaabah.'
+      },
+      bangunan: {
+        eyebrow: 'Rujukan AR · guna kompas peranti',
+        title: 'Cari arah <em>Kiblat</em> guna bangunan sekeliling',
+        sub: 'Buka kamera dan lihat anak panah 3D yang menunjuk terus ke arah Kiblat sebenar semasa anda mengelilingkannya. Aplikasi turut cuba mencari bangunan bernama berhampiran (data OpenStreetMap) yang kasarnya sejajar dengan arah itu, untuk dijadikan penanda.'
+      }
+    };
+
+    function activate(which){
+      const onBayang = which === 'bayang';
+      tabBayang.hidden = !onBayang;
+      tabBangunan.hidden = onBayang;
+      tabBtnBayang.classList.toggle('active', onBayang);
+      tabBtnBangunan.classList.toggle('active', !onBayang);
+      tabBtnBayang.setAttribute('aria-selected', onBayang ? 'true' : 'false');
+      tabBtnBangunan.setAttribute('aria-selected', onBayang ? 'false' : 'true');
+
+      const h = HERO[which];
+      heroEyebrow.textContent = h.eyebrow;
+      heroTitle.innerHTML = h.title;
+      heroSub.textContent = h.sub;
+    }
+    tabBtnBayang.addEventListener('click', ()=> activate('bayang'));
+    tabBtnBangunan.addEventListener('click', ()=> activate('bangunan'));
+  })();
+
   // ---- map picker ----
   (function(){
     const btnMapPick = $('btnMapPick');
@@ -1346,6 +1454,309 @@
     btnAR.addEventListener('click', openAR);
     btnARClose.addEventListener('click', closeAR);
     btnARErrorClose.addEventListener('click', ()=>{ arError.hidden = true; closeAR(); });
+    window.addEventListener('resize', ()=>{ if (!arOverlay.hidden) fitCanvas(); });
+  })();
+
+  // ==================== AR BUILDING REFERENCE MODE (uses device compass) ====================
+  (function(){
+    const arOverlay = $('arBuildingOverlay');
+    const arVideo = $('arBuildingVideo');
+    const arCanvas = $('arBuildingCanvas');
+    const arCtx = arCanvas.getContext('2d');
+    const arHint = $('arBuildingHint');
+    const arReadout = $('arBuildingReadout');
+    const arManual = $('arBuildingManual');
+    const arManualHeading = $('arBuildingManualHeading');
+    const arManualValue = $('arBuildingManualValue');
+    const arError = $('arBuildingError');
+    const arErrorText = $('arBuildingErrorText');
+    const btnARBuilding = $('btnARBuilding');
+    const btnARBuildingClose = $('btnARBuildingClose');
+    const btnARBuildingErrorClose = $('btnARBuildingErrorClose');
+
+    const FOV = 62;
+    let stream = null;
+    let rafId = null;
+    let heading = null;
+    let usingManual = false;
+    let sensorTimeout = null;
+    let orientationHandler = null;
+    let nearestBuilding = null;   // { name, distance, bearing }
+    let buildingLookupDone = false;
+
+    function normRel(a){ return ((a+180) % 360 + 360) % 360 - 180; }
+    function norm360(a){ return ((a % 360) + 360) % 360; }
+
+    // W3C example algorithm for compass heading from alpha/beta/gamma.
+    function computeCompassHeading(alpha, beta, gamma){
+      const d2r = Math.PI/180;
+      const x = beta ? beta*d2r : 0;
+      const y = gamma ? gamma*d2r : 0;
+      const z = alpha ? alpha*d2r : 0;
+      const cX = Math.cos(x), cY = Math.cos(y), cZ = Math.cos(z);
+      const sX = Math.sin(x), sY = Math.sin(y), sZ = Math.sin(z);
+      const Vx = -cZ*sY - sZ*sX*cY;
+      const Vy = -sZ*sY + cZ*sX*cY;
+      let comp = Math.atan(Vx/Vy);
+      if (Vy < 0){ comp += Math.PI; } else if (Vx < 0){ comp += 2*Math.PI; }
+      return comp*(180/Math.PI);
+    }
+
+    function handleOrientation(e){
+      let h = null;
+      if (typeof e.webkitCompassHeading === 'number' && !isNaN(e.webkitCompassHeading)){
+        h = e.webkitCompassHeading;
+      } else if (e.alpha !== null && e.alpha !== undefined){
+        h = computeCompassHeading(e.alpha, e.beta, e.gamma);
+      }
+      if (h !== null && !isNaN(h)){
+        heading = norm360(h);
+        if (!usingManual){
+          if (sensorTimeout){ clearTimeout(sensorTimeout); sensorTimeout = null; }
+          arManual.hidden = true;
+        }
+      }
+    }
+
+    function enableManualMode(msg){
+      usingManual = true;
+      arManual.hidden = false;
+      if (heading === null) heading = parseFloat(arManualHeading.value) || 0;
+      if (msg) arHint.textContent = msg;
+    }
+    arManualHeading.addEventListener('input', ()=>{
+      heading = parseFloat(arManualHeading.value);
+      arManualValue.textContent = Math.round(heading) + '°';
+    });
+
+    function fitCanvas(){
+      arCanvas.width = arCanvas.clientWidth * (window.devicePixelRatio || 1);
+      arCanvas.height = arCanvas.clientHeight * (window.devicePixelRatio || 1);
+    }
+    function roundRect(ctx, x, y, w, h, r){
+      ctx.beginPath();
+      ctx.moveTo(x+r, y);
+      ctx.arcTo(x+w, y, x+w, y+h, r);
+      ctx.arcTo(x+w, y+h, x, y+h, r);
+      ctx.arcTo(x, y+h, x, y, r);
+      ctx.arcTo(x, y, x+w, y, r);
+      ctx.closePath();
+    }
+
+    // ---- geometry helpers (Haversine bearing/distance) ----
+    function bearingBetween(lat1, lon1, lat2, lon2){
+      const y = Math.sin(toRad(lon2-lon1))*Math.cos(toRad(lat2));
+      const x = Math.cos(toRad(lat1))*Math.sin(toRad(lat2)) - Math.sin(toRad(lat1))*Math.cos(toRad(lat2))*Math.cos(toRad(lon2-lon1));
+      return norm360(toDeg(Math.atan2(y,x)));
+    }
+    function distanceBetween(lat1, lon1, lat2, lon2){
+      const R = 6371000;
+      const dLat = toRad(lat2-lat1), dLon = toRad(lon2-lon1);
+      const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+      return 2*R*Math.asin(Math.sqrt(a));
+    }
+
+    // ---- Overpass: find named buildings near the user, roughly aligned with Qibla bearing ----
+    async function findReferenceBuilding(){
+      if (buildingLookupDone || lat === null || lon === null) return;
+      buildingLookupDone = true;
+      try{
+        const qb = qiblaBearing(lat, lon);
+        const radius = 600;
+        const query = `[out:json][timeout:15];(way["building"]["name"](around:${radius},${lat},${lon});node["building"]["name"](around:${radius},${lat},${lon}););out center 40;`;
+        const res = await fetch('https://overpass-api.de/api/interpreter', {
+          method: 'POST',
+          body: 'data=' + encodeURIComponent(query)
+        });
+        const data = await res.json();
+        let best = null;
+        (data.elements || []).forEach(el => {
+          const la = el.type === 'node' ? el.lat : (el.center && el.center.lat);
+          const lo = el.type === 'node' ? el.lon : (el.center && el.center.lon);
+          const name = el.tags && el.tags.name;
+          if (la == null || lo == null || !name) return;
+          const brg = bearingBetween(lat, lon, la, lo);
+          const dist = distanceBetween(lat, lon, la, lo);
+          const diff = Math.abs(normRel(brg - qb));
+          if (diff <= 6){
+            if (!best || dist < best.distance) best = { name, distance: dist, bearing: brg };
+          }
+        });
+        nearestBuilding = best;
+      } catch(err){
+        nearestBuilding = null;
+      }
+    }
+
+    function drawArrow3D(screenAngleDeg, inView){
+      const w = arCanvas.width, h = arCanvas.height;
+      const dpr = window.devicePixelRatio || 1;
+      const marginPx = w*0.09;
+      let x = w*0.5 + (screenAngleDeg/(FOV/2)) * (w*0.46);
+      x = Math.max(marginPx, Math.min(w-marginPx, x));
+
+      // pseudo-3D: arrow recedes from a "ground" ellipse near the bottom
+      // up toward a vanishing point, like it's lying on the ground pointing away.
+      const baseY = h*0.72, tipY = h*0.30;
+      const baseW = 34*dpr, tipW = 6*dpr;
+
+      arCtx.save();
+      arCtx.globalAlpha = inView ? 1 : 0.5;
+
+      // ground ellipse (base marker)
+      arCtx.fillStyle = 'rgba(201,162,75,0.25)';
+      arCtx.beginPath();
+      arCtx.ellipse(x, baseY+10*dpr, baseW*1.4, baseW*0.4, 0, 0, Math.PI*2);
+      arCtx.fill();
+
+      // tapered shaft (gives a converging-perspective look)
+      const grad = arCtx.createLinearGradient(x, baseY, x, tipY);
+      grad.addColorStop(0, '#8a7239');
+      grad.addColorStop(1, '#f0d896');
+      arCtx.fillStyle = grad;
+      arCtx.shadowColor = '#c9a24b';
+      arCtx.shadowBlur = 20*dpr;
+      arCtx.beginPath();
+      arCtx.moveTo(x-baseW/2, baseY);
+      arCtx.lineTo(x+baseW/2, baseY);
+      arCtx.lineTo(x+tipW/2, tipY);
+      arCtx.lineTo(x-tipW/2, tipY);
+      arCtx.closePath();
+      arCtx.fill();
+      arCtx.shadowBlur = 0;
+
+      // arrowhead at the tip
+      const ah = 34*dpr, aw = tipW*3.2;
+      arCtx.fillStyle = '#f0d896';
+      arCtx.beginPath();
+      arCtx.moveTo(x-aw, tipY);
+      arCtx.lineTo(x+aw, tipY);
+      arCtx.lineTo(x, tipY-ah);
+      arCtx.closePath();
+      arCtx.fill();
+
+      // label
+      const fontSize = 18*dpr;
+      arCtx.font = `700 ${fontSize}px 'IBM Plex Mono', monospace`;
+      const label = 'KIBLAT';
+      const padX = 14*dpr, padY = 9*dpr;
+      const tw = arCtx.measureText(label).width;
+      const ly = tipY - ah - 22*dpr;
+      let lx = Math.max(marginPx+tw/2+padX, Math.min(w-marginPx-tw/2-padX, x));
+      arCtx.fillStyle = 'rgba(10,11,17,0.75)';
+      roundRect(arCtx, lx-tw/2-padX, ly-fontSize, tw+padX*2, fontSize+padY*1.6, 10*dpr);
+      arCtx.fill();
+      arCtx.strokeStyle = '#c9a24b'; arCtx.lineWidth = 2*dpr;
+      roundRect(arCtx, lx-tw/2-padX, ly-fontSize, tw+padX*2, fontSize+padY*1.6, 10*dpr);
+      arCtx.stroke();
+      arCtx.fillStyle = '#ece6d6';
+      arCtx.textAlign = 'center';
+      arCtx.textBaseline = 'middle';
+      arCtx.fillText(label, lx, ly-fontSize/2+padY*0.6);
+
+      arCtx.restore();
+    }
+
+    function drawLoop(){
+      if (!arOverlay.hidden){
+        fitCanvas();
+        arCtx.clearRect(0,0,arCanvas.width, arCanvas.height);
+
+        if (lat !== null && lon !== null && heading !== null){
+          const qb = qiblaBearing(lat, lon);
+          const rel = normRel(qb - heading);
+          const inView = Math.abs(rel) <= FOV/2;
+          drawArrow3D(rel, inView);
+
+          findReferenceBuilding();
+
+          let readoutHtml = `Menghadap: <b>${heading.toFixed(0)}°</b> · Kiblat: <b>${qb.toFixed(0)}°</b>`;
+          if (nearestBuilding){
+            readoutHtml += ` · Rujukan: <b>${nearestBuilding.name}</b> (~${nearestBuilding.distance.toFixed(0)}m)`;
+          }
+          arReadout.innerHTML = readoutHtml;
+
+          if (nearestBuilding){
+            arHint.textContent = `Bangunan rujukan berhampiran: "${nearestBuilding.name}", ~${nearestBuilding.distance.toFixed(0)}m — kasarnya sejajar dengan arah Kiblat. Anak panah emas menunjukkan arah sebenar.`;
+          } else if (buildingLookupDone){
+            arHint.textContent = 'Tiada bangunan bernama (data OpenStreetMap) dijumpai sejajar dengan Kiblat berhampiran anda. Ikut sahaja anak panah emas.';
+          } else {
+            arHint.textContent = 'Mencari bangunan rujukan berhampiran…';
+          }
+        } else if (lat === null || lon === null){
+          arHint.textContent = 'Tetapkan lokasi anda dahulu (tutup mod ini, isi Latitud/Longitud di atas).';
+          arReadout.innerHTML = '';
+        } else {
+          arHint.textContent = 'Menunggu data kompas…';
+        }
+      }
+      rafId = requestAnimationFrame(drawLoop);
+    }
+
+    function showError(msg){ arErrorText.textContent = msg; arError.hidden = false; }
+
+    async function openAR(){
+      if (lat === null || lon === null){
+        alert('Sila tetapkan lokasi anda dahulu sebelum membuka mod ini.');
+        return;
+      }
+      arOverlay.hidden = false;
+      arError.hidden = true;
+      arHint.textContent = 'Memulakan kamera…';
+      heading = null; usingManual = false; arManual.hidden = true;
+      nearestBuilding = null; buildingLookupDone = false;
+
+      try{
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' } }, audio: false
+        });
+        arVideo.srcObject = stream;
+      } catch(err){
+        showError('Tidak dapat mengakses kamera (' + err.message + ').');
+        return;
+      }
+
+      if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function'){
+        try{
+          const res = await DeviceOrientationEvent.requestPermission();
+          if (res !== 'granted') enableManualMode('Akses kompas ditolak. Laraskan "Arah manual" di bawah.');
+        } catch(err){
+          enableManualMode('Tidak dapat meminta akses kompas. Guna "Arah manual" di bawah.');
+        }
+      }
+
+      orientationHandler = handleOrientation;
+      if ('ondeviceorientationabsolute' in window){
+        window.addEventListener('deviceorientationabsolute', orientationHandler, true);
+      }
+      window.addEventListener('deviceorientation', orientationHandler, true);
+
+      sensorTimeout = setTimeout(()=>{
+        if (heading === null || !('DeviceOrientationEvent' in window)){
+          enableManualMode('Sensor kompas tidak dikesan. Laraskan "Arah manual" di bawah mengikut arah sebenar anda menghadap.');
+        }
+      }, 2500);
+
+      fitCanvas();
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(drawLoop);
+    }
+
+    function closeAR(){
+      arOverlay.hidden = true;
+      if (rafId){ cancelAnimationFrame(rafId); rafId = null; }
+      if (sensorTimeout){ clearTimeout(sensorTimeout); sensorTimeout = null; }
+      if (stream){ stream.getTracks().forEach(t => t.stop()); stream = null; }
+      if (orientationHandler){
+        window.removeEventListener('deviceorientationabsolute', orientationHandler, true);
+        window.removeEventListener('deviceorientation', orientationHandler, true);
+        orientationHandler = null;
+      }
+    }
+
+    btnARBuilding.addEventListener('click', openAR);
+    btnARBuildingClose.addEventListener('click', closeAR);
+    btnARBuildingErrorClose.addEventListener('click', ()=>{ arError.hidden = true; closeAR(); });
     window.addEventListener('resize', ()=>{ if (!arOverlay.hidden) fitCanvas(); });
   })();
 
