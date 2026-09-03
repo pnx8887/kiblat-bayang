@@ -673,4 +673,1024 @@
     </div>
     <div class="ar-error" id="arError" hidden>
       <div>
-        
+        <p id="arErrorText">—</p>
+        <button class="primary" id="btnARErrorClose" type="button">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="map-modal" id="mapModal" hidden>
+    <div class="map-card">
+      <div class="map-card-head">
+        <h3>Tanda lokasi di peta</h3>
+        <button class="ghost" id="btnMapClose" type="button" aria-label="Tutup peta">✕</button>
+      </div>
+      <p class="map-hint">Ketik atau seret penanda ke lokasi anda, kemudian sahkan.</p>
+      <div id="mapPicker"></div>
+      <div class="map-coords-row">
+        <span id="mapCoordsText">Ketik pada peta untuk letak penanda…</span>
+      </div>
+      <div class="map-actions">
+        <button class="ghost" id="btnMapCancel" type="button">Batal</button>
+        <button class="primary" id="btnMapConfirm" type="button" disabled>Guna lokasi ini</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rasdul-banner" id="rasdulBanner" hidden>
+    <span class="ico">🌞</span>
+    <div>
+      <div class="rasdul-title" id="rasdulTitle">—</div>
+      <div class="rasdul-sub" id="rasdulSub">—</div>
+    </div>
+  </div>
+
+  <div class="rotate-banner" id="rotateBanner">
+    <span class="big" id="rotateHeadline">—</span>
+    <span class="txt" id="rotateText">Menunggu lokasi dan masa siang hari.</span>
+  </div>
+
+  <div class="readout">
+    <div class="cell hero">
+      <div class="k">Arah Kiblat</div>
+      <div class="v" id="outQibla">—<small> °</small></div>
+    </div>
+    <div class="cell">
+      <div class="k">Bayang jatuh ke arah</div>
+      <div class="v" id="outShadow">—<small> °</small></div>
+    </div>
+    <div class="cell">
+      <div class="k">Azimut matahari</div>
+      <div class="v" id="outSunAz">—<small> °</small></div>
+    </div>
+    <div class="cell">
+      <div class="k">Ketinggian matahari</div>
+      <div class="v" id="outSunEl">—<small> °</small></div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <h2>Penafian</h2>
+    <p>Aplikasi ini disediakan secara percuma, "sebagaimana adanya", tanpa sebarang jaminan ketepatan. Arah yang dipaparkan dikira menggunakan formula astronomi piawai (bearing bulatan besar ke Kaabah dan kedudukan matahari), dan ketepatannya bergantung sepenuhnya pada ketepatan lokasi GPS peranti anda, jam &amp; zon waktu peranti, serta cara tiang ditegakkan.</p>
+    <p>Aplikasi ini bukan produk rasmi JAKIM atau mana-mana badan agama, dan tidak dimaksudkan untuk menggantikan pengesahan rasmi. <strong>Sekiranya ketepatan mutlak diperlukan (contohnya untuk pembinaan masjid atau surau baharu), sila sahkan dengan JAKIM, jabatan agama negeri, atau pihak berkelayakan tempatan.</strong></p>
+    <p>Aplikasi ini tidak mengumpul, menyimpan, atau menghantar sebarang data peribadi ke mana-mana pelayan. Lokasi dan suapan kamera anda diproses sepenuhnya di dalam pelayar peranti anda sendiri dan tidak dikongsi dengan pembangun aplikasi ini atau pihak ketiga.</p>
+  </div>
+
+  </div>
+
+  <div id="tabBangunan" class="tab-panel" hidden>
+
+    <div class="howto">
+      <h2>Rujukan Bangunan</h2>
+      <p class="note" style="padding-bottom:14px;">Tiada kompas digunakan langsung. Sebaliknya, aplikasi mengira sudut sebenar antara arah ke sebuah bangunan (dari koordinat sebenarnya) dan arah Kiblat — kedua-duanya dikira terus daripada koordinat GPS, tanpa sensor. Anda pilih bangunan yang boleh dilihat dengan mata kasar, kemudian aplikasi beritahu berapa darjah untuk berpaling daripada bangunan itu ke arah Kiblat.</p>
+      <p class="note" style="padding-bottom:14px;">Cari bangunan bernama berhampiran (data OpenStreetMap), atau tandakan mana-mana bangunan/penanda terus di peta jika ia tiada dalam senarai.</p>
+    </div>
+
+    <div class="controls">
+      <div class="loc-row" style="margin-bottom:10px;">
+        <button class="primary" id="btnFindBuildings" type="button">🔍 Cari bangunan berhampiran</button>
+        <button class="ghost" id="btnPinBuilding" type="button">📍 Tanda bangunan di peta</button>
+      </div>
+      <div class="status-line" id="buildingStatus">Tetapkan lokasi anda di tab "Kaedah Bayang" dahulu, kemudian cari bangunan di sini.</div>
+      <div id="buildingList" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;"></div>
+    </div>
+
+    <div class="rotate-banner" id="buildingBanner" style="display:none;">
+      <span class="big" id="buildingHeadline">—</span>
+      <span class="txt" id="buildingText">—</span>
+    </div>
+
+    <div class="instrument" id="buildingMapWrap" style="display:none;">
+      <div id="buildingMap" style="width:100%; height:320px; border-radius:12px; overflow:hidden;"></div>
+      <div class="legend" style="padding-top:14px;">
+        <span><span class="swatch qibla"></span>Arah Kiblat (dari lokasi anda)</span>
+        <span><span class="swatch shadow"></span>Arah ke bangunan</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="map-modal" id="buildingPickModal" hidden>
+    <div class="map-card">
+      <div class="map-card-head">
+        <h3>Tanda bangunan di peta</h3>
+        <button class="ghost" id="btnBuildingPickClose" type="button" aria-label="Tutup peta">✕</button>
+      </div>
+      <p class="map-hint">Ketik pada bangunan yang boleh anda nampak, kemudian sahkan.</p>
+      <div id="buildingPickMap" style="width:100%; height:46vh; min-height:260px; border-radius:12px; border:1px solid var(--line); background:#2a2e3f;"></div>
+      <div class="map-coords-row"><span id="buildingPickCoordsText">Ketik pada peta untuk letak penanda…</span></div>
+      <div class="map-actions">
+        <button class="ghost" id="btnBuildingPickCancel" type="button">Batal</button>
+        <button class="primary" id="btnBuildingPickConfirm" type="button" disabled>Guna bangunan ini</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>Arah Kiblat menggunakan bearing bulatan besar (great-circle) ke Kaabah (21.4225° U, 39.8262° T). Kedudukan matahari menggunakan persamaan kedudukan solar piawai. Ketepatan bergantung pada jam, zon waktu, dan ketepatan lokasi peranti anda.</footer>
+</div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const latInput = $('latInput'), lonInput = $('lonInput');
+  const timeInput = $('timeInput');
+  const btnLocate = $('btnLocate'), btnLive = $('btnLive'), btnNow = $('btnNow');
+  const locStatus = $('locStatus');
+
+  let liveMode = true;
+  let liveTimer = null;
+  let lat = null, lon = null;
+
+  const KAABA_LAT = 21.4225, KAABA_LON = 39.8262;
+
+  function toRad(d){ return d*Math.PI/180; }
+  function toDeg(r){ return r*180/Math.PI; }
+  function norm360(a){ return ((a % 360) + 360) % 360; }
+
+  function julianDay(date){
+    return date.getTime()/86400000 + 2440587.5;
+  }
+
+  function solarPosition(date, lat, lon){
+    const JD = julianDay(date);
+    const T = (JD - 2451545.0) / 36525.0;
+    let L0 = 280.46646 + T*(36000.76983 + T*0.0003032);
+    L0 = norm360(L0);
+    let M = 357.52911 + T*(35999.05029 - 0.0001537*T);
+    M = norm360(M);
+    const e = 0.016708634 - T*(0.000042037 + 0.0000001267*T);
+    const Mrad = toRad(M);
+    const C = Math.sin(Mrad)*(1.914602 - T*(0.004817 + 0.000014*T))
+             + Math.sin(2*Mrad)*(0.019993 - 0.000101*T)
+             + Math.sin(3*Mrad)*0.000289;
+    const trueLong = L0 + C;
+    const omega = 125.04 - 1934.136*T;
+    const lambda = trueLong - 0.00569 - 0.00478*Math.sin(toRad(omega));
+    const eps0 = 23 + (26 + (21.448 - T*(46.815 + T*(0.00059 - T*0.001813)))/60)/60;
+    const eps = eps0 + 0.00256*Math.cos(toRad(omega));
+    const lambdaRad = toRad(lambda);
+    const epsRad = toRad(eps);
+    const delta = Math.asin(Math.sin(epsRad)*Math.sin(lambdaRad));
+
+    const y = Math.pow(Math.tan(epsRad/2), 2);
+    const L0rad = toRad(L0);
+    let Eqtime = y*Math.sin(2*L0rad) - 2*e*Math.sin(Mrad) + 4*e*y*Math.sin(Mrad)*Math.cos(2*L0rad)
+               - 0.5*y*y*Math.sin(4*L0rad) - 1.25*e*e*Math.sin(2*Mrad);
+    Eqtime = 4*toDeg(Eqtime);
+
+    const utcMinutes = date.getUTCHours()*60 + date.getUTCMinutes() + date.getUTCSeconds()/60;
+    let trueSolarTime = utcMinutes + Eqtime + 4*lon;
+    trueSolarTime = ((trueSolarTime % 1440) + 1440) % 1440;
+
+    let hourAngle = trueSolarTime/4 - 180;
+
+    const latRad = toRad(lat);
+    const haRad = toRad(hourAngle);
+    const zenith = Math.acos( Math.sin(latRad)*Math.sin(delta) + Math.cos(latRad)*Math.cos(delta)*Math.cos(haRad) );
+    const elevation = 90 - toDeg(zenith);
+
+    let azimuth;
+    const azDenom = Math.cos(latRad)*Math.sin(zenith);
+    if (Math.abs(azDenom) > 0.0001){
+      let azRad = (Math.sin(latRad)*Math.cos(zenith) - Math.sin(delta)) / azDenom;
+      azRad = Math.max(-1, Math.min(1, azRad));
+      if (hourAngle > 0){
+        azimuth = norm360(toDeg(Math.acos(azRad)) + 180);
+      } else {
+        azimuth = norm360(540 - toDeg(Math.acos(azRad)));
+      }
+    } else {
+      azimuth = lat > 0 ? 180 : 0;
+    }
+
+    return { elevation, azimuth };
+  }
+
+  function qiblaBearing(lat, lon){
+    const kLat = toRad(KAABA_LAT), kLon = toRad(KAABA_LON);
+    const lat1 = toRad(lat), lon1 = toRad(lon);
+    const dLon = kLon - lon1;
+    const yv = Math.sin(dLon)*Math.cos(kLat);
+    const xv = Math.cos(lat1)*Math.sin(kLat) - Math.sin(lat1)*Math.cos(kLat)*Math.cos(dLon);
+    return norm360(toDeg(Math.atan2(yv, xv)));
+  }
+
+  // ---- Rasdul Qiblat (Istiwa' A'zam): the two moments each year the sun
+  // sits directly over the Kaaba. Computed dynamically (not hardcoded) so
+  // it stays correct every year. Coarse scan + refine to ~1 minute.
+  let rasdulCache = { year: null, moments: null };
+  function findZenithMoment(year, month, day){
+    let best = null;
+    const centerMs = Date.UTC(year, month, day);
+    for (let t = centerMs - 3*86400000; t <= centerMs + 3*86400000; t += 60000){
+      const el = solarPosition(new Date(t), KAABA_LAT, KAABA_LON).elevation;
+      if (!best || el > best.el) best = { t, el };
+    }
+    return new Date(best.t);
+  }
+  function getRasdulMoments(year){
+    if (rasdulCache.year === year) return rasdulCache.moments;
+    const moments = [ findZenithMoment(year, 4, 28), findZenithMoment(year, 6, 15) ];
+    rasdulCache = { year, moments };
+    return moments;
+  }
+  // Returns null if not near a Rasdul Qiblat moment, else details about it.
+  function checkRasdulQiblat(date){
+    const moments = getRasdulMoments(date.getFullYear());
+    for (const m of moments){
+      const diffMin = (date.getTime() - m.getTime()) / 60000;
+      if (Math.abs(diffMin) <= 20){
+        return { moment: m, diffMin, active: Math.abs(diffMin) <= 3 };
+      }
+    }
+    return null;
+  }
+
+  // ---- dial geometry ----
+  const CX = 200, CY = 200;
+  function pointAt(az, r){
+    const rad = toRad(az);
+    return { x: CX + r*Math.sin(rad), y: CY - r*Math.cos(rad) };
+  }
+
+  function drawTicks(){
+    const ticksG = $('ticks'), cardG = $('cardinals');
+    let ticks = '', cards = '';
+    for (let a=0; a<360; a+=10){
+      const major = a % 90 === 0;
+      const mid = a % 30 === 0;
+      const r1 = 150;
+      const r2 = major ? 132 : (mid ? 138 : 143);
+      const p1 = pointAt(a, r1), p2 = pointAt(a, r2);
+      ticks += `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" stroke="${major ? '#c9a24b' : 'rgba(236,230,214,0.28)'}" stroke-width="${major ? 2 : 1}"/>`;
+    }
+    const labels = [[0,'N'],[90,'E'],[180,'S'],[270,'W']];
+    labels.forEach(([a,l])=>{
+      const p = pointAt(a, 118);
+      cards += `<text x="${p.x.toFixed(1)}" y="${(p.y+5).toFixed(1)}">${l}</text>`;
+    });
+    ticksG.innerHTML = ticks;
+    cardG.innerHTML = cards;
+  }
+  drawTicks();
+
+  function setNeedle(id, az, len, tipEl){
+    const p = pointAt(az, len);
+    const el = $(id);
+    el.setAttribute('x2', p.x.toFixed(1));
+    el.setAttribute('y2', p.y.toFixed(1));
+    if (tipEl){
+      tipEl.setAttribute('x', (p.x-4).toFixed(1));
+      tipEl.setAttribute('y', (p.y-4).toFixed(1));
+      tipEl.setAttribute('transform', `rotate(45 ${p.x.toFixed(1)} ${p.y.toFixed(1)})`);
+    }
+    return p;
+  }
+
+  function setArc(az1, az2){
+    // shorter arc between az1 and az2, at radius 100
+    const R = 100;
+    let diff = norm360(az2 - az1);
+    if (diff > 180) diff -= 360; // now in (-180,180]
+    const end = az1 + diff;
+    const p1 = pointAt(az1, R);
+    const p2 = pointAt(end, R);
+    const largeArc = Math.abs(diff) > 180 ? 1 : 0;
+    const sweep = diff > 0 ? 1 : 0;
+    $('sweepArc').setAttribute('d', `M ${p1.x.toFixed(1)} ${p1.y.toFixed(1)} A ${R} ${R} 0 ${largeArc} ${sweep} ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`);
+  }
+
+  function fmtDeg(v){ return v.toFixed(1); }
+
+  function updateRasdulBanner(date){
+    const rq = checkRasdulQiblat(date);
+    const banner = $('rasdulBanner');
+    if (!rq){ banner.hidden = true; return; }
+    banner.hidden = false;
+    const localTimeStr = rq.moment.toLocaleTimeString('ms-MY', { hour:'2-digit', minute:'2-digit' });
+    if (rq.active){
+      $('rasdulTitle').textContent = 'Hari Rasdul Kiblat — SEKARANG';
+      $('rasdulSub').textContent = `Matahari tepat di atas Kaabah sekarang. Hadap terus ke arah matahari (bukan bayang) — itulah arah Kiblat yang tepat, tanpa perlu kira sudut.`;
+    } else {
+      const when = rq.diffMin < 0 ? `dalam ${Math.abs(rq.diffMin).toFixed(0)} minit` : `${rq.diffMin.toFixed(0)} minit lalu`;
+      $('rasdulTitle').textContent = 'Hari ini Hari Rasdul Kiblat';
+      $('rasdulSub').textContent = `Waktu puncak ${localTimeStr} (waktu peranti anda), ${when}. Pada waktu itu, cukup hadap ke arah matahari untuk dapat Kiblat yang tepat.`;
+    }
+  }
+
+  function render(){
+    if (lat===null || lon===null){
+      $('dialCaption').textContent = 'Set a location to begin.';
+      return;
+    }
+    const date = getSelectedDate();
+    if (!date){ return; }
+
+    updateRasdulBanner(date);
+
+    const sun = solarPosition(date, lat, lon);
+    const qb = qiblaBearing(lat, lon);
+
+    $('outQibla').innerHTML = fmtDeg(qb) + '<small> °</small>';
+    $('outSunAz').innerHTML = fmtDeg(sun.azimuth) + '<small> °</small>';
+    $('outSunEl').innerHTML = fmtDeg(sun.elevation) + '<small> °</small>';
+
+    const daylight = sun.elevation > 0.3;
+
+    if (!daylight){
+      $('outShadow').innerHTML = '—';
+      $('rotateBanner').classList.add('warn');
+      $('rotateHeadline').textContent = 'Tiada bayang buat masa ini';
+      $('rotateText').textContent = sun.elevation <= 0.3 && sun.elevation > -6
+        ? 'Matahari berada tepat di ufuk — bayang akan menjadi terlalu panjang dan tidak boleh dipercayai. Tunggu sehingga matahari naik sedikit lagi.'
+        : 'Matahari berada di bawah ufuk pada masa ini, jadi tiang tidak menghasilkan bayang. Pilih masa siang hari di atas.';
+      $('dialCaption').textContent = 'Matahari di bawah ufuk — dail ditunjukkan untuk rujukan sahaja.';
+      $('shadowNeedle').setAttribute('opacity', '0.25');
+      $('sunDot').setAttribute('opacity', '0.25');
+      $('sweepArc').setAttribute('opacity', '0');
+      setNeedle('shadowNeedle', norm360(sun.azimuth), 150);
+      setNeedle('sunDot', sun.azimuth, 170).x;
+      const sp = pointAt(sun.azimuth, 170);
+      $('sunDot').setAttribute('cx', sp.x.toFixed(1));
+      $('sunDot').setAttribute('cy', sp.y.toFixed(1));
+      setNeedle('qiblaNeedle', qb, 160, $('qiblaTip'));
+      return;
+    }
+
+    const shadowAz = norm360(sun.azimuth);
+    $('outShadow').innerHTML = fmtDeg(shadowAz) + '<small> °</small>';
+
+    $('shadowNeedle').setAttribute('opacity', '1');
+    $('sunDot').setAttribute('opacity', '1');
+    $('sweepArc').setAttribute('opacity', '0.85');
+
+    setNeedle('shadowNeedle', shadowAz, 150);
+    const sp = pointAt(sun.azimuth, 170);
+    $('sunDot').setAttribute('cx', sp.x.toFixed(1));
+    $('sunDot').setAttribute('cy', sp.y.toFixed(1));
+    setNeedle('qiblaNeedle', qb, 160, $('qiblaTip'));
+    setArc(shadowAz, qb);
+
+    let delta = qb - shadowAz;
+    delta = ((delta + 540) % 360) - 180; // normalize to (-180,180]
+    const dir = delta >= 0 ? 'ikut jam' : 'lawan jam';
+    const mag = Math.abs(delta);
+
+    $('rotateBanner').classList.remove('warn');
+    $('rotateHeadline').textContent = `Pusing ${mag.toFixed(1)}° ${dir}`;
+    const near180 = mag > 170;
+    $('rotateText').textContent = near180
+      ? `Kiblat berada hampir tepat bertentangan dengan bayang anda sekarang — dengan kata lain, hadap ke arah matahari (belakangkan bayang) untuk menghadap Kiblat.`
+      : `Dari garis bayang — menghadap dari pangkal tiang ke arah hujung bayang — pusing ${mag.toFixed(1)}° ${dir} untuk menghadap Kiblat.`;
+    $('dialCaption').textContent = `Matahari ${fmtDeg(sun.elevation)}° di atas ufuk · bayang menghala ke ${fmtDeg(shadowAz)}°`;
+  }
+
+  // ---- time handling ----
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function dateToLocalInputValue(d){
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+  function getSelectedDate(){
+    if (liveMode){ return new Date(); }
+    const v = timeInput.value;
+    if (!v) return null;
+    const [datePart, timePart] = v.split('T');
+    const [y,m,d] = datePart.split('-').map(Number);
+    const [hh,mm] = timePart.split(':').map(Number);
+    return new Date(y, m-1, d, hh, mm, 0);
+  }
+
+  function setLive(on){
+    liveMode = on;
+    btnLive.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btnLive.textContent = on ? '● Langsung — sekarang' : '○ Langsung — dijeda';
+    timeInput.disabled = on;
+    if (on){
+      timeInput.value = dateToLocalInputValue(new Date());
+      if (liveTimer) clearInterval(liveTimer);
+      liveTimer = setInterval(()=>{ timeInput.value = dateToLocalInputValue(new Date()); render(); }, 1000);
+    } else {
+      if (liveTimer) clearInterval(liveTimer);
+    }
+    render();
+  }
+
+  timeInput.value = dateToLocalInputValue(new Date());
+
+  btnLive.addEventListener('click', ()=> setLive(!liveMode));
+  btnNow.addEventListener('click', ()=> setLive(true));
+  timeInput.addEventListener('input', ()=>{
+    if (liveMode) setLive(false); else render();
+  });
+
+  // ---- location handling ----
+  function setLocation(newLat, newLon, msg, cls){
+    lat = newLat; lon = newLon;
+    latInput.value = newLat.toFixed(4);
+    lonInput.value = newLon.toFixed(4);
+    locStatus.textContent = msg;
+    locStatus.className = 'status-line ' + (cls||'');
+    render();
+  }
+
+  btnLocate.addEventListener('click', ()=>{
+    if (!('geolocation' in navigator)){
+      locateViaIP('Geolokasi tidak tersedia dalam pelayar ini.');
+      return;
+    }
+    locStatus.textContent = 'Meminta lokasi (GPS)…';
+    locStatus.className = 'status-line';
+    let settled = false;
+    navigator.geolocation.getCurrentPosition(
+      pos => { settled = true; setLocation(pos.coords.latitude, pos.coords.longitude, `Lokasi ditemui · ketepatan ±${Math.round(pos.coords.accuracy)} m`, 'ok'); },
+      err => { settled = true; locateViaIP('Akses GPS disekat atau ditolak (' + err.message + ').'); },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+    // Some sandboxed frames never fire the callback at all — fall back after a short wait.
+    setTimeout(()=>{ if (!settled){ settled = true; locateViaIP('Tiada respons GPS dalam pratonton ini.'); } }, 4000);
+  });
+
+  function locateViaIP(reason){
+    locStatus.textContent = (reason ? reason + ' ' : '') + 'Menganggar lokasi melalui alamat IP…';
+    locStatus.className = 'status-line';
+    fetch('https://get.geojs.io/v1/ip/geo.json')
+      .then(r => r.json())
+      .then(d => {
+        const la = parseFloat(d.latitude), lo = parseFloat(d.longitude);
+        if (!isNaN(la) && !isNaN(lo)){
+          const place = [d.city, d.country_name].filter(Boolean).join(', ');
+          setLocation(la, lo, `Anggaran melalui IP${place ? ' (' + place + ')' : ''} — kurang tepat daripada GPS. Untuk GPS sebenar, muat turun fail ini dan buka terus dalam pelayar.`, 'ok');
+        } else {
+          locStatus.textContent = 'Tidak dapat menganggarkan lokasi. Sila masukkan koordinat secara manual di bawah.';
+          locStatus.className = 'status-line err';
+        }
+      })
+      .catch(() => {
+        locStatus.textContent = 'Tidak dapat menganggarkan lokasi. Sila masukkan koordinat secara manual di bawah.';
+        locStatus.className = 'status-line err';
+      });
+  }
+
+  [latInput, lonInput].forEach(el=>{
+    el.addEventListener('input', ()=>{
+      const la = parseFloat(latInput.value), lo = parseFloat(lonInput.value);
+      if (!isNaN(la) && !isNaN(lo) && la>=-90 && la<=90 && lo>=-180 && lo<=180){
+        lat = la; lon = lo;
+        locStatus.textContent = 'Menggunakan koordinat yang dimasukkan secara manual.';
+        locStatus.className = 'status-line';
+        render();
+      }
+    });
+  });
+
+  setLive(true);
+
+  // ---- tabs ----
+  (function(){
+    const tabBtnBayang = $('tabBtnBayang'), tabBtnBangunan = $('tabBtnBangunan');
+    const tabBayang = $('tabBayang'), tabBangunan = $('tabBangunan');
+    const heroEyebrow = $('heroEyebrow'), heroTitle = $('heroTitle'), heroSub = $('heroSub');
+
+    const HERO = {
+      bayang: {
+        eyebrow: 'Kaedah Gnomon · 000° = utara',
+        title: 'Cari arah <em>Kiblat</em> melalui bayang',
+        sub: 'Tancapkan tiang lurus di tanah lapang. Alat ini mengira arah bayang tiang tersebut pada bila-bila masa siang, dan berapa darjah perlu diputar dari garis bayang itu untuk menghadap Kaabah.'
+      },
+      bangunan: {
+        eyebrow: 'Rujukan geometri · tiada kompas',
+        title: 'Cari arah <em>Kiblat</em> guna bangunan sekeliling',
+        sub: 'Pilih sebuah bangunan yang boleh anda lihat, dan aplikasi mengira terus daripada koordinat GPS — bukan kompas — berapa darjah untuk berpaling daripada bangunan itu ke arah Kiblat.'
+      }
+    };
+
+    function activate(which){
+      const onBayang = which === 'bayang';
+      tabBayang.hidden = !onBayang;
+      tabBangunan.hidden = onBayang;
+      tabBtnBayang.classList.toggle('active', onBayang);
+      tabBtnBangunan.classList.toggle('active', !onBayang);
+      tabBtnBayang.setAttribute('aria-selected', onBayang ? 'true' : 'false');
+      tabBtnBangunan.setAttribute('aria-selected', onBayang ? 'false' : 'true');
+
+      const h = HERO[which];
+      heroEyebrow.textContent = h.eyebrow;
+      heroTitle.innerHTML = h.title;
+      heroSub.textContent = h.sub;
+    }
+    tabBtnBayang.addEventListener('click', ()=> activate('bayang'));
+    tabBtnBangunan.addEventListener('click', ()=> activate('bangunan'));
+  })();
+
+  // ---- map picker ----
+  (function(){
+    const btnMapPick = $('btnMapPick');
+    const mapModal = $('mapModal');
+    const btnMapClose = $('btnMapClose');
+    const btnMapCancel = $('btnMapCancel');
+    const btnMapConfirm = $('btnMapConfirm');
+    const mapCoordsText = $('mapCoordsText');
+
+    let map = null;
+    let marker = null;
+    let pickedLat = null, pickedLon = null;
+
+    function ensureMap(){
+      if (map) return;
+      const startLat = (lat !== null) ? lat : 21.4225;
+      const startLon = (lon !== null) ? lon : 39.8262;
+      const startZoom = (lat !== null) ? 12 : 3;
+
+      map = L.map('mapPicker', { attributionControl: true }).setView([startLat, startLon], startZoom);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+      }).addTo(map);
+
+      if (lat !== null && lon !== null){
+        placeMarker(lat, lon);
+      }
+
+      map.on('click', (e)=>{ placeMarker(e.latlng.lat, e.latlng.lng); });
+    }
+
+    function placeMarker(la, lo){
+      pickedLat = la; pickedLon = lo;
+      if (marker){
+        marker.setLatLng([la, lo]);
+      } else {
+        marker = L.marker([la, lo], { draggable: true }).addTo(map);
+        marker.on('dragend', ()=>{
+          const p = marker.getLatLng();
+          pickedLat = p.lat; pickedLon = p.lng;
+          mapCoordsText.textContent = `${pickedLat.toFixed(4)}, ${pickedLon.toFixed(4)}`;
+        });
+      }
+      mapCoordsText.textContent = `${pickedLat.toFixed(4)}, ${pickedLon.toFixed(4)}`;
+      btnMapConfirm.disabled = false;
+    }
+
+    function openMap(){
+      mapModal.hidden = false;
+      ensureMap();
+      setTimeout(()=>{ if (map) map.invalidateSize(); }, 50);
+    }
+
+    function closeMap(){
+      mapModal.hidden = true;
+    }
+
+    btnMapPick.addEventListener('click', openMap);
+    btnMapClose.addEventListener('click', closeMap);
+    btnMapCancel.addEventListener('click', closeMap);
+    btnMapConfirm.addEventListener('click', ()=>{
+      if (pickedLat === null || pickedLon === null) return;
+      setLocation(pickedLat, pickedLon, `Lokasi ditanda secara manual di peta (${pickedLat.toFixed(4)}, ${pickedLon.toFixed(4)}).`, 'ok');
+      closeMap();
+    });
+  })();
+
+  // ==================== AR MODE (no compass — fixed relative angle) ====================
+  (function(){
+    const arOverlay = $('arOverlay');
+    const arVideo = $('arVideo');
+    const arCanvas = $('arCanvas');
+    const arCtx = arCanvas.getContext('2d');
+    const arHint = $('arHint');
+    const arReadout = $('arReadout');
+    const arError = $('arError');
+    const arErrorText = $('arErrorText');
+    const btnAR = $('btnAR');
+    const btnARClose = $('btnARClose');
+    const btnARErrorClose = $('btnARErrorClose');
+
+    let stream = null;
+    let rafId = null;
+
+    function normRel(a){ return ((a+180) % 360 + 360) % 360 - 180; }
+
+    function fitCanvas(){
+      arCanvas.width = arCanvas.clientWidth * (window.devicePixelRatio || 1);
+      arCanvas.height = arCanvas.clientHeight * (window.devicePixelRatio || 1);
+    }
+
+    function roundRect(ctx, x, y, w, h, r){
+      ctx.beginPath();
+      ctx.moveTo(x+r, y);
+      ctx.arcTo(x+w, y, x+w, y+h, r);
+      ctx.arcTo(x+w, y+h, x, y+h, r);
+      ctx.arcTo(x, y+h, x, y, r);
+      ctx.arcTo(x, y, x+w, y, r);
+      ctx.closePath();
+    }
+
+    // Draws a ray from the shared base point, tilted `screenAngleDeg` from
+    // straight-up (positive = tilts right). This is fixed on screen — it
+    // does not depend on which way the phone is actually facing.
+    function drawRay(screenAngleDeg, color, textColor, label, glow){
+      const w = arCanvas.width, h = arCanvas.height;
+      const dpr = window.devicePixelRatio || 1;
+      const ox = w*0.5, oy = h*0.66;
+      const rayLen = h*0.42;
+      const a = screenAngleDeg * Math.PI/180;
+      const ux = Math.sin(a), uy = -Math.cos(a);
+      const tx = ox + ux*rayLen, ty = oy + uy*rayLen;
+
+      arCtx.save();
+      if (glow){ arCtx.shadowColor = color; arCtx.shadowBlur = 24*dpr; }
+      arCtx.strokeStyle = color;
+      arCtx.lineWidth = 12*dpr;
+      arCtx.lineCap = 'round';
+      arCtx.beginPath();
+      arCtx.moveTo(ox, oy);
+      arCtx.lineTo(tx, ty);
+      arCtx.stroke();
+      arCtx.shadowBlur = 0;
+
+      // arrowhead at the tip
+      const aw = 15*dpr, ah = 30*dpr;
+      const px = -uy, py = ux;
+      arCtx.fillStyle = color;
+      arCtx.beginPath();
+      arCtx.moveTo(tx + px*aw, ty + py*aw);
+      arCtx.lineTo(tx - px*aw, ty - py*aw);
+      arCtx.lineTo(tx + ux*ah, ty + uy*ah);
+      arCtx.closePath();
+      arCtx.fill();
+
+      // label pill beyond the tip
+      const fontSize = 19*dpr;
+      arCtx.font = `700 ${fontSize}px 'IBM Plex Mono', monospace`;
+      const padX = 14*dpr, padY = 9*dpr;
+      const tw = arCtx.measureText(label).width;
+      let lx = tx + ux*(ah + 34*dpr);
+      let ly = ty + uy*(ah + 34*dpr);
+      lx = Math.max(tw/2 + padX + 8*dpr, Math.min(w - tw/2 - padX - 8*dpr, lx));
+      ly = Math.max(fontSize + padY + 8*dpr, ly);
+      arCtx.fillStyle = 'rgba(10,11,17,0.75)';
+      roundRect(arCtx, lx - tw/2 - padX, ly - fontSize, tw + padX*2, fontSize + padY*1.6, 10*dpr);
+      arCtx.fill();
+      arCtx.strokeStyle = color; arCtx.lineWidth = 2*dpr;
+      roundRect(arCtx, lx - tw/2 - padX, ly - fontSize, tw + padX*2, fontSize + padY*1.6, 10*dpr);
+      arCtx.stroke();
+      arCtx.fillStyle = textColor;
+      arCtx.textAlign = 'center';
+      arCtx.textBaseline = 'middle';
+      arCtx.fillText(label, lx, ly - fontSize/2 + padY*0.6);
+      arCtx.restore();
+    }
+
+    function drawBase(){
+      const w = arCanvas.width, h = arCanvas.height;
+      const dpr = window.devicePixelRatio || 1;
+      const ox = w*0.5, oy = h*0.66;
+      arCtx.save();
+      arCtx.fillStyle = '#ece6d6';
+      arCtx.beginPath();
+      arCtx.arc(ox, oy, 7*dpr, 0, Math.PI*2);
+      arCtx.fill();
+      arCtx.strokeStyle = '#12141c';
+      arCtx.lineWidth = 2*dpr;
+      arCtx.stroke();
+      arCtx.font = `600 ${13*dpr}px 'IBM Plex Mono', monospace`;
+      arCtx.fillStyle = 'rgba(236,230,214,0.75)';
+      arCtx.textAlign = 'center';
+      arCtx.fillText('PANGKAL TIANG', ox, oy + 24*dpr);
+      arCtx.restore();
+    }
+
+    function drawArc(delta){
+      const w = arCanvas.width, h = arCanvas.height;
+      const dpr = window.devicePixelRatio || 1;
+      const ox = w*0.5, oy = h*0.66;
+      const r = h*0.20;
+      arCtx.save();
+      arCtx.strokeStyle = 'rgba(91,156,138,0.9)';
+      arCtx.lineWidth = 4*dpr;
+      arCtx.lineCap = 'round';
+      arCtx.beginPath();
+      const a0 = -Math.PI/2, a1 = -Math.PI/2 + delta*Math.PI/180;
+      arCtx.arc(ox, oy, r, Math.min(a0,a1), Math.max(a0,a1));
+      arCtx.stroke();
+      arCtx.restore();
+    }
+
+    function drawLoop(){
+      if (!arOverlay.hidden){
+        fitCanvas();
+        arCtx.clearRect(0,0,arCanvas.width, arCanvas.height);
+
+        if (lat !== null && lon !== null){
+          const now = new Date();
+          const sun = solarPosition(now, lat, lon);
+          const qb = qiblaBearing(lat, lon);
+          const daylight = sun.elevation > 0.3;
+          const shadowAz = ((sun.azimuth) % 360 + 360) % 360;
+
+          drawBase();
+
+          // Shadow ray is always fixed straight up (0°) — you physically
+          // rotate yourself/phone until this overlaps the real shadow.
+          // Qibla ray is offset by the true, sensor-free angle between them.
+          const delta = daylight ? normRel(qb - shadowAz) : 0;
+
+          if (daylight){
+            drawArc(delta);
+            drawRay(0, '#ece6d6', '#12141c', 'BAYANG', false);
+          }
+          drawRay(daylight ? delta : 0, '#c9a24b', '#12141c', 'KIBLAT', true);
+
+          const dir = delta >= 0 ? 'ikut jam' : 'lawan jam';
+          const rq = checkRasdulQiblat(now);
+          arReadout.innerHTML =
+            `Kiblat: <b>${qb.toFixed(0)}°</b>` +
+            (daylight
+              ? ` · Bayang: <b>${shadowAz.toFixed(0)}°</b> · Sudut: <b>${Math.abs(delta).toFixed(0)}° ${dir}</b>`
+              : ` · <b style="color:var(--danger)">Tiada bayang — matahari di bawah ufuk</b>`);
+
+          if (rq && rq.active){
+            arHint.textContent = '🌞 Hari Rasdul Kiblat sekarang — matahari tepat di atas Kaabah. Hadap terus ke arah matahari (belakangkan bayang) untuk Kiblat yang tepat.';
+          } else if (daylight && Math.abs(delta) > 170){
+            arHint.textContent = `Kiblat hampir tepat bertentangan dengan bayang sekarang — hadap ke arah matahari (belakangkan bayang) untuk menghadap Kiblat.`;
+          } else {
+            arHint.textContent = daylight
+              ? `Padankan anak panah putih dengan bayang sebenar tiang di skrin. Anak panah emas automatik menunjuk ${Math.abs(delta).toFixed(0)}° ${dir} — itulah arah Kiblat.`
+              : 'Tiada bayang buat masa ini (matahari di bawah ufuk), jadi kaedah ini tidak boleh disahkan secara visual sekarang. Guna dail utama di halaman sebelum ini.';
+          }
+        } else {
+          arHint.textContent = 'Tetapkan lokasi anda dahulu (tutup mod AR, isi Latitud/Longitud di atas).';
+          arReadout.innerHTML = '';
+        }
+      }
+      rafId = requestAnimationFrame(drawLoop);
+    }
+
+    function showError(msg){
+      arErrorText.textContent = msg;
+      arError.hidden = false;
+    }
+
+    async function openAR(){
+      if (lat === null || lon === null){
+        alert('Sila tetapkan lokasi anda dahulu (guna GPS atau masukkan koordinat secara manual) sebelum membuka mod AR.');
+        return;
+      }
+      arOverlay.hidden = false;
+      arError.hidden = true;
+      arHint.textContent = 'Memulakan kamera…';
+
+      try{
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' } },
+          audio: false
+        });
+        arVideo.srcObject = stream;
+      } catch(err){
+        showError('Tidak dapat mengakses kamera (' + err.message + '). Pastikan anda benarkan akses kamera untuk laman ini dalam tetapan pelayar.');
+        return;
+      }
+
+      fitCanvas();
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(drawLoop);
+    }
+
+    function closeAR(){
+      arOverlay.hidden = true;
+      if (rafId){ cancelAnimationFrame(rafId); rafId = null; }
+      if (stream){ stream.getTracks().forEach(t => t.stop()); stream = null; }
+    }
+
+    btnAR.addEventListener('click', openAR);
+    btnARClose.addEventListener('click', closeAR);
+    btnARErrorClose.addEventListener('click', ()=>{ arError.hidden = true; closeAR(); });
+    window.addEventListener('resize', ()=>{ if (!arOverlay.hidden) fitCanvas(); });
+  })();
+
+  // ==================== BUILDING REFERENCE (no compass — pure geometry) ====================
+  (function(){
+    const btnFindBuildings = $('btnFindBuildings');
+    const btnPinBuilding = $('btnPinBuilding');
+    const buildingStatus = $('buildingStatus');
+    const buildingList = $('buildingList');
+    const buildingBanner = $('buildingBanner');
+    const buildingHeadline = $('buildingHeadline');
+    const buildingText = $('buildingText');
+    const buildingMapWrap = $('buildingMapWrap');
+
+    const pickModal = $('buildingPickModal');
+    const btnPickClose = $('btnBuildingPickClose');
+    const btnPickCancel = $('btnBuildingPickCancel');
+    const btnPickConfirm = $('btnBuildingPickConfirm');
+    const pickCoordsText = $('buildingPickCoordsText');
+
+    let bMap = null, bUserMarker = null, bBuildingMarker = null, bQiblaLine = null, bBuildingLine = null;
+    let pickMap = null, pickMarker = null, pickedLat = null, pickedLon = null;
+
+    function bearingBetween(lat1, lon1, lat2, lon2){
+      const y = Math.sin(toRad(lon2-lon1))*Math.cos(toRad(lat2));
+      const x = Math.cos(toRad(lat1))*Math.sin(toRad(lat2)) - Math.sin(toRad(lat1))*Math.cos(toRad(lat2))*Math.cos(toRad(lon2-lon1));
+      return norm360(toDeg(Math.atan2(y,x)));
+    }
+    function distanceBetween(lat1, lon1, lat2, lon2){
+      const R = 6371000;
+      const dLat = toRad(lat2-lat1), dLon = toRad(lon2-lon1);
+      const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+      return 2*R*Math.asin(Math.sqrt(a));
+    }
+    // project a point `distMeters` out from (lat,lon) along `bearingDeg`, for drawing a sight-line on the map
+    function projectPoint(la, lo, bearingDeg, distMeters){
+      const R = 6371000;
+      const brng = toRad(bearingDeg);
+      const lat1 = toRad(la), lon1 = toRad(lo);
+      const lat2 = Math.asin(Math.sin(lat1)*Math.cos(distMeters/R) + Math.cos(lat1)*Math.sin(distMeters/R)*Math.cos(brng));
+      const lon2 = lon1 + Math.atan2(Math.sin(brng)*Math.sin(distMeters/R)*Math.cos(lat1), Math.cos(distMeters/R)-Math.sin(lat1)*Math.sin(lat2));
+      return [toDeg(lat2), toDeg(lon2)];
+    }
+
+    const OVERPASS_MIRRORS = [
+      'https://overpass-api.de/api/interpreter',
+      'https://overpass.kumi.systems/api/interpreter',
+      'https://overpass.openstreetmap.ru/api/interpreter'
+    ];
+
+    async function fetchOverpass(query){
+      let lastErr = null;
+      for (const url of OVERPASS_MIRRORS){
+        try{
+          const controller = new AbortController();
+          const timer = setTimeout(()=> controller.abort(), 12000);
+          const fullUrl = url + '?data=' + encodeURIComponent(query);
+          const res = await fetch(fullUrl, { method: 'GET', signal: controller.signal });
+          clearTimeout(timer);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return await res.json();
+        } catch(err){
+          lastErr = err;
+          // try the next mirror
+        }
+      }
+      throw lastErr || new Error('Semua pelayan Overpass tidak dapat dihubungi');
+    }
+
+    async function searchNearbyBuildings(){
+      if (lat === null || lon === null){
+        buildingStatus.textContent = 'Tetapkan lokasi anda di tab "Kaedah Bayang" dahulu (GPS, peta, atau masukkan manual).';
+        buildingStatus.className = 'status-line err';
+        return;
+      }
+      buildingStatus.textContent = 'Mencari bangunan bernama berhampiran (OpenStreetMap)…';
+      buildingStatus.className = 'status-line';
+      buildingList.innerHTML = '';
+      try{
+        const radius = 1000;
+        const query = `[out:json][timeout:15];(way["building"]["name"](around:${radius},${lat},${lon});node["building"]["name"](around:${radius},${lat},${lon});node["amenity"~"place_of_worship|mall"]["name"](around:${radius},${lat},${lon}););out center 60;`;
+        const data = await fetchOverpass(query);
+        const items = [];
+        (data.elements || []).forEach(el => {
+          const la = el.type === 'node' ? el.lat : (el.center && el.center.lat);
+          const lo = el.type === 'node' ? el.lon : (el.center && el.center.lon);
+          const name = el.tags && el.tags.name;
+          if (la == null || lo == null || !name) return;
+          items.push({ name, lat: la, lon: lo, distance: distanceBetween(lat, lon, la, lo) });
+        });
+        items.sort((a,b)=> a.distance - b.distance);
+        const top = items.slice(0, 12);
+        if (top.length === 0){
+          buildingStatus.textContent = 'Tiada bangunan bernama dijumpai dalam radius 1km. Cuba tandakan bangunan terus di peta.';
+          buildingStatus.className = 'status-line err';
+          return;
+        }
+        buildingStatus.textContent = `${top.length} bangunan dijumpai — pilih satu:`;
+        buildingStatus.className = 'status-line ok';
+        buildingList.innerHTML = '';
+        top.forEach(b => {
+          const btn = document.createElement('button');
+          btn.className = 'ghost';
+          btn.style.textAlign = 'left';
+          btn.style.justifyContent = 'space-between';
+          btn.style.display = 'flex';
+          btn.innerHTML = `<span>${b.name}</span><span style="color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11.5px;">${b.distance.toFixed(0)}m</span>`;
+          btn.addEventListener('click', ()=> selectBuilding(b.name, b.lat, b.lon));
+          buildingList.appendChild(btn);
+        });
+      } catch(err){
+        buildingStatus.textContent = `Carian gagal: ${err.message}. Cuba lagi, atau tandakan bangunan terus di peta.`;
+        buildingStatus.className = 'status-line err';
+      }
+    }
+
+    function selectBuilding(name, bLat, bLon){
+      const qb = qiblaBearing(lat, lon);
+      const brgToBuilding = bearingBetween(lat, lon, bLat, bLon);
+      const distToBuilding = distanceBetween(lat, lon, bLat, bLon);
+      let delta = qb - brgToBuilding;
+      delta = ((delta + 540) % 360) - 180;
+      const dir = delta >= 0 ? 'ikut jam' : 'lawan jam';
+      const mag = Math.abs(delta);
+
+      buildingBanner.style.display = 'flex';
+      buildingBanner.classList.remove('warn');
+      buildingHeadline.textContent = mag < 3 ? 'Sudah menghadap Kiblat' : `Pusing ${mag.toFixed(1)}° ${dir}`;
+      buildingText.textContent = mag < 3
+        ? `Bangunan "${name}" (~${distToBuilding.toFixed(0)}m) sudah kasarnya sejajar dengan arah Kiblat.`
+        : `Berdiri menghadap "${name}" (~${distToBuilding.toFixed(0)}m), kemudian pusing ${mag.toFixed(1)}° ${dir} untuk menghadap Kiblat.`;
+
+      renderBuildingMap(bLat, bLon, brgToBuilding, qb);
+    }
+
+    function renderBuildingMap(bLat, bLon, brgToBuilding, qb){
+      buildingMapWrap.style.display = 'flex';
+      if (!bMap){
+        bMap = L.map('buildingMap').setView([lat, lon], 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19, attribution: '© OpenStreetMap'
+        }).addTo(bMap);
+      }
+      setTimeout(()=> bMap.invalidateSize(), 50);
+
+      if (bUserMarker) bMap.removeLayer(bUserMarker);
+      if (bBuildingMarker) bMap.removeLayer(bBuildingMarker);
+      if (bQiblaLine) bMap.removeLayer(bQiblaLine);
+      if (bBuildingLine) bMap.removeLayer(bBuildingLine);
+
+      bUserMarker = L.marker([lat, lon]).addTo(bMap).bindPopup('Lokasi anda');
+      bBuildingMarker = L.marker([bLat, bLon]).addTo(bMap).bindPopup('Bangunan rujukan');
+
+      const qiblaFar = projectPoint(lat, lon, qb, Math.min(2000, distanceBetween(lat,lon,bLat,bLon)*2.2));
+      bQiblaLine = L.polyline([[lat,lon], qiblaFar], { color:'#c9a24b', weight:4, opacity:0.9 }).addTo(bMap);
+      bBuildingLine = L.polyline([[lat,lon], [bLat,bLon]], { color:'#ece6d6', weight:3, opacity:0.85, dashArray:'2,6' }).addTo(bMap);
+
+      const bounds = L.latLngBounds([[lat,lon],[bLat,bLon], qiblaFar]);
+      bMap.fitBounds(bounds, { padding:[30,30] });
+    }
+
+    btnFindBuildings.addEventListener('click', searchNearbyBuildings);
+
+    // ---- manual map pin fallback ----
+    function ensurePickMap(){
+      if (pickMap) return;
+      const startLat = (lat !== null) ? lat : 21.4225;
+      const startLon = (lon !== null) ? lon : 39.8262;
+      pickMap = L.map('buildingPickMap').setView([startLat, startLon], (lat!==null)?16:3);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19, attribution: '© OpenStreetMap'
+      }).addTo(pickMap);
+      pickMap.on('click', (e)=> placePickMarker(e.latlng.lat, e.latlng.lng));
+    }
+    function placePickMarker(la, lo){
+      pickedLat = la; pickedLon = lo;
+      if (pickMarker){ pickMarker.setLatLng([la,lo]); }
+      else { pickMarker = L.marker([la,lo], { draggable:true }).addTo(pickMap);
+        pickMarker.on('dragend', ()=>{ const p = pickMarker.getLatLng(); pickedLat=p.lat; pickedLon=p.lng; pickCoordsText.textContent = `${pickedLat.toFixed(4)}, ${pickedLon.toFixed(4)}`; });
+      }
+      pickCoordsText.textContent = `${pickedLat.toFixed(4)}, ${pickedLon.toFixed(4)}`;
+      btnPickConfirm.disabled = false;
+    }
+
+    btnPinBuilding.addEventListener('click', ()=>{
+      if (lat === null || lon === null){
+        alert('Sila tetapkan lokasi anda dahulu di tab "Kaedah Bayang".');
+        return;
+      }
+      pickModal.hidden = false;
+      ensurePickMap();
+      setTimeout(()=>{ if (pickMap) pickMap.invalidateSize(); }, 50);
+    });
+    btnPickClose.addEventListener('click', ()=> pickModal.hidden = true);
+    btnPickCancel.addEventListener('click', ()=> pickModal.hidden = true);
+    btnPickConfirm.addEventListener('click', ()=>{
+      if (pickedLat === null || pickedLon === null) return;
+      selectBuilding('Bangunan yang ditanda', pickedLat, pickedLon);
+      pickModal.hidden = true;
+    });
+  })();
+
+
+})();
+</script>
+<script>
+  if ('serviceWorker' in navigator){
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(()=>{});
+    });
+  }
+  let deferredInstallPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    const btn = document.getElementById('btnInstall');
+    if (btn) btn.style.display = 'inline-block';
+  });
+  document.getElementById('btnInstall')?.addEventListener('click', async () => {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    document.getElementById('btnInstall').style.display = 'none';
+  });
+</script>
+<script data-goatcounter="https://pnx8887.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
